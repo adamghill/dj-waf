@@ -22,7 +22,7 @@ uv add dj-waf
 
 ## Usage
 
-Add the app to your `INSTALLED_APPS` in `settings.py`:
+1. Add the app to your `INSTALLED_APPS` in `settings.py`:
 
 ```python
 INSTALLED_APPS = [
@@ -31,20 +31,20 @@ INSTALLED_APPS = [
 ]
 ```
 
-Configure your WAF settings in `settings.py`:
+2. Configure your WAF settings in `settings.py`:
 
 ```python
 # settings.py
 
 WAF = {
     "default": {
-        "BACKEND": "django_waf.backends.cloudflare.CloudflareBackend",
+        "BACKEND": "dj_waf.backends.cloudflare.CloudflareBackend",
         "OPTIONS": {
-            "apikey": "waf-cloudflare-api-key",
+            "apikey": "cloudflare-waf-api-key",
             "domain": "your-example-domain.com",
             "rules": [
                 {
-                    "description": "django-waf",
+                    "description": "dj-waf",
                     "expression": '(http.request.uri.path wildcard r"/wp-*") or (http.request.uri.path wildcard r"/*wp-*") or (http.request.uri.path wildcard r"/wordpress*") or (http.request.uri.path wildcard r"/*wordpress*") or (http.request.uri.path wildcard r"*.php") or (http.request.uri.path eq "/.env") or (http.request.uri.path wildcard r"/admin/*")',
                     "action": "block",
                     "enabled": True,
@@ -55,7 +55,7 @@ WAF = {
 }
 ```
 
-Then run the management command to apply the rules:
+3. Then run the management command to apply the rules:
 
 ```bash
 python manage.py create_waf_rules
@@ -63,17 +63,17 @@ python manage.py create_waf_rules
 
 The command will create WAF rules in your configured WAF provider (e.g., Cloudflare) based on the rules defined in your WAF settings.
 
-You can also configure multiple WAF providers and specify which one to use:
+## Create Cloudflare API
 
-```bash
-python manage.py create_waf_rules --backend cloudflare
-```
-
-To see all available options:
-
-```bash
-python manage.py create_waf_rules --help
-```
+1. Go to https://dash.cloudflare.com/profile/api-tokens
+2. Click `Create Token`
+3. Scroll to the bottom and click `Get started` in the "Create Custom Token" section
+4. In the Permissions area, select `Zone`, `Zone Settings`, `Read`
+5. Click `Add more`
+6. Select `Zone`, `Zone WAF`, `Edit`
+7. Click `Continue to summary`
+8. Click `Create Token`
+9. Copy API token from `User API Tokens` page
 
 ## Available Backends
 
