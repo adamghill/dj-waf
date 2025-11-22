@@ -1,6 +1,6 @@
 [project]
 name = "dj-waf"
-version = "0.1.0"
+version = "0.2.0"
 description = "Add WAF rules to block known bots and malicious traffic for Django applications. Provides easy integration with popular WAF services like Cloudflare."
 authors = [
   { name = "Adam Hill", email = "adam@adamghill.com" },
