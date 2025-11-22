@@ -1,4 +1,3 @@
-import json
 import logging
 from dataclasses import asdict, dataclass
 
@@ -103,8 +102,7 @@ class CloudflareBackend(WafBackend):
     def create_cloudflare_waf_rule(self, waf_rule):
         """Create new WAF rule by setting up the entrypoint."""
 
-        payload = {"rules": [waf_rule.to_dict()]}
-        data = json.dumps(payload).encode("utf-8")
+        data = {"rules": [waf_rule.to_dict()]}
 
         self.request(
             url=f"https://api.cloudflare.com/client/v4/zones/{self.zone_id}/rulesets/phases/http_request_firewall_custom/entrypoint",
@@ -118,12 +116,10 @@ class CloudflareBackend(WafBackend):
         existing_data = rule.data or {}
 
         # Merge with existing rule data to preserve fields like position
-        payload = {
+        data = {
             **existing_data,
             **rule.to_dict(),
         }
-
-        data = json.dumps(payload).encode("utf-8")
 
         self.request(
             url=f"https://api.cloudflare.com/client/v4/zones/{self.zone_id}/rulesets/{rule.ruleset_id}/rules/{rule.rule_id}",

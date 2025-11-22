@@ -20,7 +20,12 @@ class WafBackend:
     def request(self, url: str, method="GET", headers: dict | None = None, data: dict | None = None):
         headers = headers or {"Authorization": f"Bearer {self.apikey}", "Content-Type": "application/json"}
 
-        req = urllib.request.Request(url, method=method, headers=headers, data=data)  # noqa: S310
+        encoded_data = None
+
+        if data is not None:
+            encoded_data = json.dumps(data).encode("utf-8")
+
+        req = urllib.request.Request(url, method=method, headers=headers, data=encoded_data)  # noqa: S310
 
         try:
             with urllib.request.urlopen(req) as response:  # noqa: S310
